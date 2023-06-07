@@ -19,7 +19,7 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight, false);
 document.body.appendChild( renderer.domElement );
 
-let array = new Array(10).fill(null)
+let array = new Array(35).fill(null)
 
 
 // New object
@@ -54,8 +54,32 @@ const bottomPlane = new THREE.Mesh(
 
 scene.add( plane, rightPlane, leftPlane, topPlane, bottomPlane );
 
+
+
+// ******* SQUARES
+let squares = []
+let squarestStart = -1;
+array.forEach((item, indexPosition) => {
+  let square = new THREE.Mesh(
+    new THREE.PlaneGeometry(1,1,1,1),
+    new THREE.MeshBasicMaterial(  {
+      map: loader.load('richicoder_logo.png'),
+    }  )
+    )
+  let xRandom = Math.round(Math.random())
+  let yRandom = Math.round(Math.random())
+  let randomMath = [Math.random()/3, -Math.random()/3]
+  const yPosition = randomMath[xRandom]
+  const xPosition = randomMath[yRandom]
+  const zPosition = -1 * indexPosition/5 + squarestStart;
+  
+  square.position.set( xPosition, yPosition, zPosition )
+  squares.push({ ...square, ...{ initX: square.position.x, initY: square.position.y}});
+  scene.add( square )
+})
+
 // Camera Position
-camera.position.set(0,0,2);
+camera.position.set(0,0,0);
 camera.lookAt(plane.position);
 // First plane position
 plane.position.set(0,0,-17.5)
@@ -74,30 +98,6 @@ bottomPlane.position.set(0,-2.5,0)
 bottomPlane.rotation.x = 90*(2*3.14/360)
 bottomPlane.rotation.z = 90*(2*3.14/360)
 
-// ******* SQUARES
-let squares = []
-
-array.forEach((item, indexPosition) => {
-  let square = new THREE.Mesh(
-    new THREE.PlaneGeometry(1,1,1,1),
-    new THREE.MeshBasicMaterial(  {
-      map: loader.load('richicoder_logo.png'),
-    }  )
-    )
-  let indexRandom = Math.round(Math.random())
-  let randomMath = [Math.random(), -Math.random()]
-  const yPosition = randomMath[indexRandom]
-  const xPosition = randomMath[indexRandom]
-  
-  square.position.set(xPosition,yPosition,Number(`0.${indexPosition}`)*5)
-  squares.push({ ...square, ...{ initX: square.position.x, initY: square.position.y}});
-  scene.add( square )
-})
-
-
-
-
-
 function animate() {
 	requestAnimationFrame( animate );
   playScrollAnimation()
@@ -109,7 +109,7 @@ animate();
 
 function playScrollAnimation() {
   camera.lookAt(plane.position)
-  camera.position.z = (-scrollPercent+50)/10
+  camera.position.z = -scrollPercent/10
   zCamera = camera.position.z;
   squareChecker(zCamera)
 }
