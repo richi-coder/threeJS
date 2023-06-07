@@ -1,6 +1,15 @@
+import Scrollbar from 'smooth-scrollbar';
 import './style.css'
 import * as THREE from 'three';
-import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+// import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+
+// SMOOTHNESS
+
+let scrollbar = new Scrollbar.init(document.body, {
+  renderByPixels: true
+})
+
+let scrollPercent = 0;
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 0.1, 100);
@@ -11,7 +20,7 @@ document.body.appendChild( renderer.domElement );
 
 let array = new Array(15).fill(null)
 
-let scrollPercent = 0;
+
 // New object
 
 // *********** ROOM
@@ -104,13 +113,16 @@ function playScrollAnimation() {
 }
 
 
-window.addEventListener('scroll', () => {
+setTimeout(() => {
+  
+  scrollbar.addListener(() => {
     scrollPercent =
-        ((document.documentElement.scrollTop || document.body.scrollTop) /
-            ((document.documentElement.scrollHeight ||
-                document.body.scrollHeight) -
-                document.documentElement.clientHeight)) *
-        100;
-      console.log(scrollPercent);
+        ((scrollbar.offset.y) /
+            (scrollbar.size.content.height -
+                document.documentElement.clientHeight)) * 100;
+    console.log(scrollPercent);
 })
+
+
+}, 1000);
 

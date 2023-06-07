@@ -26,9 +26,13 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  flex-direction: column;
   min-width: 320px;
   min-height: 100vh;
+  width: 100%;
+  height: 100vh;
+  overflow: auto;
+  scroll-behavior: smooth;
 }
 
 h1 {
@@ -37,11 +41,12 @@ h1 {
 }
 
 #app {
-  max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
   height: 2000px;
+  width: 100%;
+  background-color: #535bf2;
 }
 
 .logo {
