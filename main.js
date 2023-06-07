@@ -10,15 +10,16 @@ let scrollbar = new Scrollbar.init(document.body, {
 })
 
 let scrollPercent = 0;
+let zCamera;
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 0.1, 100);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight, false);
 document.body.appendChild( renderer.domElement );
 
-let array = new Array(15).fill(null)
+let array = new Array(10).fill(null)
 
 
 // New object
@@ -51,9 +52,6 @@ const bottomPlane = new THREE.Mesh(
                           new THREE.MeshBasicMaterial( { color: 0x222222, wireframe: true } )
                           )
 
-// const geometry = new THREE.BoxGeometry( 50, 50, 50 );
-// const material = new THREE.MeshBasicMaterial( { color: 0x01ff1 } );
-// const cube = new THREE.Mesh( geometry, material );
 scene.add( plane, rightPlane, leftPlane, topPlane, bottomPlane );
 
 // Camera Position
@@ -77,6 +75,7 @@ bottomPlane.rotation.x = 90*(2*3.14/360)
 bottomPlane.rotation.z = 90*(2*3.14/360)
 
 // ******* SQUARES
+let squares = []
 
 array.forEach((item, indexPosition) => {
   let square = new THREE.Mesh(
@@ -91,9 +90,12 @@ array.forEach((item, indexPosition) => {
   const xPosition = randomMath[indexRandom]
   
   square.position.set(xPosition,yPosition,Number(`0.${indexPosition}`)*5)
-  
+  squares.push({ ...square, ...{ initX: square.position.x, initY: square.position.y}});
   scene.add( square )
 })
+
+
+
 
 
 function animate() {
@@ -107,14 +109,28 @@ animate();
 
 function playScrollAnimation() {
   camera.lookAt(plane.position)
-  // camera.position.set(20, 10, 20)
-  // plane.position.z = scrollPercent;
   camera.position.z = (-scrollPercent+50)/10
+  zCamera = camera.position.z;
+  squareChecker(zCamera)
 }
 
 
-setTimeout(() => {
-  
+function squareChecker(zCamera) {
+  let minimalDistance = 1;
+  squares.forEach(square => {
+    const { x, y, z } = square.position;
+    const deltaZ = zCamera - z;
+    if (deltaZ <= minimalDistance && deltaZ > 0) {
+        const diffZ = 2*(minimalDistance - deltaZ);
+        square.position.x = square.initX >= 0 ? square.initX + diffZ : square.initX - diffZ;
+        square.position.y = square.initY >= 0 ? square.initY + diffZ : square.initY - diffZ;
+    }
+  })
+}
+
+
+// setTimeout(() => {
+  // scrollPercent updater based on scrolling
   scrollbar.addListener(() => {
     scrollPercent =
         ((scrollbar.offset.y) /
@@ -124,5 +140,5 @@ setTimeout(() => {
 })
 
 
-}, 1000);
+// }, 1000);
 
