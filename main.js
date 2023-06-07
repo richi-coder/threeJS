@@ -9,8 +9,12 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight, false);
 document.body.appendChild( renderer.domElement );
 
+let array = new Array(15).fill(null)
+
 let scrollPercent = 0;
 // New object
+
+// *********** ROOM
 
 // Textures 
 const loader = new THREE.TextureLoader();
@@ -63,6 +67,25 @@ bottomPlane.position.set(0,-2.5,0)
 bottomPlane.rotation.x = 90*(2*3.14/360)
 bottomPlane.rotation.z = 90*(2*3.14/360)
 
+// ******* SQUARES
+
+array.forEach((item, indexPosition) => {
+  let square = new THREE.Mesh(
+    new THREE.PlaneGeometry(1,1,1,1),
+    new THREE.MeshBasicMaterial(  {
+      map: loader.load('richicoder_logo.png'),
+    }  )
+    )
+  let indexRandom = Math.round(Math.random())
+  let randomMath = [Math.random(), -Math.random()]
+  const yPosition = randomMath[indexRandom]
+  const xPosition = randomMath[indexRandom]
+  
+  square.position.set(xPosition,yPosition,Number(`0.${indexPosition}`)*5)
+  
+  scene.add( square )
+})
+
 
 function animate() {
 	requestAnimationFrame( animate );
@@ -77,7 +100,7 @@ function playScrollAnimation() {
   camera.lookAt(plane.position)
   // camera.position.set(20, 10, 20)
   // plane.position.z = scrollPercent;
-  camera.position.z = scrollPercent
+  camera.position.z = (-scrollPercent+50)/10
 }
 
 
