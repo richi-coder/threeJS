@@ -101,8 +101,7 @@ bottomPlane.rotation.z = 90*(2*3.14/360)
 function animate() {
 	requestAnimationFrame( animate );
   playScrollAnimation()
-
-	renderer.render( scene, camera );
+  render()
 }
 animate();
 
@@ -129,7 +128,6 @@ function squareChecker(zCamera) {
 }
 
 
-// setTimeout(() => {
   // scrollPercent updater based on scrolling
   scrollbar.addListener(() => {
     scrollPercent =
@@ -139,6 +137,15 @@ function squareChecker(zCamera) {
     console.log(scrollPercent);
 })
 
+// Resizing 
+window.addEventListener('resize', onWindowResize, false)
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix()
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    render()
+}
 
-// }, 1000);
-
+function render() {
+  renderer.render( scene, camera );
+}
