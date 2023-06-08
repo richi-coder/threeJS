@@ -63,7 +63,7 @@ array.forEach((item, indexPosition) => {
   let square = new THREE.Mesh(
     new THREE.PlaneGeometry(1,1,1,1),
     new THREE.MeshBasicMaterial(  {
-      map: loader.load('richicoder_logo.png'),
+      map: loader.load('https://richicoder.com/richicoder_profile_photo.png'),
     }  )
     )
   let xRandom = Math.round(Math.random())
