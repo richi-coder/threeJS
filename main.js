@@ -3,6 +3,13 @@ import './style.css'
 import * as THREE from 'three';
 // import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 
+// Stats
+// const stats = new Stats()
+// stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+// document.body.appendChild( stats.dom );
+
+(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='https://mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);})()
+
 // SMOOTHNESS
 
 let scrollbar = new Scrollbar.init(document.body, {
@@ -99,8 +106,14 @@ bottomPlane.rotation.x = 90*(2*3.14/360)
 bottomPlane.rotation.z = 90*(2*3.14/360)
 
 function animate() {
+  // Checking stats
+  // stats.begin();
+	// stats.end();
+  // Animation frame
 	requestAnimationFrame( animate );
+  // animating on scroll
   playScrollAnimation()
+  // render
   render()
 }
 animate();
